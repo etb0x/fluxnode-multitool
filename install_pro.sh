@@ -36,13 +36,13 @@ function config_veryfity(){
 		echo -e "${ARROW} ${CYAN}Insightexplorer enabled.................[${X_MARK}${CYAN}]${NC}"
 		echo -e "${ARROW} ${CYAN}Removing wallet.dat...${NC}"
 		echo -e "${ARROW} ${CYAN}Use old chain will be skipped...${NC}"
-		sudo rm -rf /home/$USER/$CONFIG_DIR/wallet.dat && sleep 1
+		sudo rm -rf $CONFIG_DIR/wallet.dat && sleep 1
 		SKIP_OLD_CHAIN="1"
 	fi
   fi
 }
 function import_date() {
-	if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+	if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
 		if [[ -z "$import_settings" ]]; then
 			if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
 		          config_smart_create "import"
@@ -214,9 +214,9 @@ function install_watchdog() {
 			telegram_bot_token="0";
 			telegram_chat_id="0";
 		fi
-		if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-			index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-			tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+		if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
+			index_from_file=$(grep -w zelnodeindex $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+			tx_from_file=$(grep -w zelnodeoutpoint $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
 			stak_info=$(curl -s -m 5 https://$network_url_1/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 			if [[ "$stak_info" == "" ]]; then
 			stak_info=$(curl -s -m 5 https://$network_url_2/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
@@ -308,49 +308,49 @@ function wipe_clean() {
 		sudo mv /home/$USER/.zelcash /home/$USER/.flux > /dev/null 2>&1 && sleep 1
 		sudo mv /home/$USER/.flux/zelcash.conf /home/$USER/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
 	fi
-	if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+	if [[ -d $CONFIG_DIR ]]; then
 		config_veryfity
 		if [[ -z "$use_old_chain" ]]; then
 			if [[ "$SKIP_OLD_CHAIN" == "0" ]]; then       
 				if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
 					echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
 					sudo rm -rf /home/$USERNAME/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate > /dev/null 2>&1
-					sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1
+					sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1
 				else
 					BOOTSTRAP_SKIP="1"
-					sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-					sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-					sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/database 
-					sudo rm -rf /home/$USER/$CONFIG_DIR/sporks 
+					sudo rm -rf $CONFIG_DIR/fee_estimates.dat 
+					sudo rm -rf $CONFIG_DIR/peers.dat 
+					sudo rm -rf $CONFIG_DIR/zelnode.conf 
+					sudo rm -rf $CONFIG_DIR/zelnodecache.dat 
+					sudo rm -rf $CONFIG_DIR/zelnodepayments.dat
+					sudo rm -rf $CONFIG_DIR/db.log
+					sudo rm -rf $CONFIG_DIR/debug.log 
+					sudo rm -rf $CONFIG_DIR/flux.conf 
+					sudo rm -rf $CONFIG_DIR/database 
+					sudo rm -rf $CONFIG_DIR/sporks 
 				fi 
 			else
 				echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-				sudo rm -rf /home/$USER/$CONFIG_DIR/determ_zelnodes /home/$USER/$CONFIG_DIR/sporks /home/$USER/$CONFIG_DIR/database /home/$USER/$CONFIG_DIR/blocks /home/$USER/$CONFIG_DIR/chainstate > /dev/null 2>&1  
-				sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 
+				sudo rm -rf $CONFIG_DIR/determ_zelnodes $CONFIG_DIR/sporks $CONFIG_DIR/database $CONFIG_DIR/blocks $CONFIG_DIR/chainstate > /dev/null 2>&1  
+				sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1 
 			fi
 		else
 			if [[ "$use_old_chain" == "1" ]]; then
 				BOOTSTRAP_SKIP="1"
-				sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-				sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat
-				sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-				sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat
-				sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-				sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-				sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log 
-				sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf 
-				sudo rm -rf /home/$USER/$CONFIG_DIR/database 
-				sudo rm -rf /home/$USER/$CONFIG_DIR/sporks 
+				sudo rm -rf $CONFIG_DIR/fee_estimates.dat 
+				sudo rm -rf $CONFIG_DIR/peers.dat
+				sudo rm -rf $CONFIG_DIR/zelnode.conf 
+				sudo rm -rf $CONFIG_DIR/zelnodecache.dat
+				sudo rm -rf $CONFIG_DIR/zelnodepayments.dat
+				sudo rm -rf $CONFIG_DIR/db.log
+				sudo rm -rf $CONFIG_DIR/debug.log 
+				sudo rm -rf $CONFIG_DIR/flux.conf 
+				sudo rm -rf $CONFIG_DIR/database 
+				sudo rm -rf $CONFIG_DIR/sporks 
 			else
 				 echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-				sudo rm -rf /home/$USER/$CONFIG_DIR/determ_zelnodes /home/$USER/$CONFIG_DIR/sporks /home/$USER/$CONFIG_DIR/database /home/$USER/$CONFIG_DIR/blocks /home/$USER/$CONFIG_DIR/chainstate > /dev/null 2>&1
-				sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1
+				sudo rm -rf $CONFIG_DIR/determ_zelnodes $CONFIG_DIR/sporks $CONFIG_DIR/database $CONFIG_DIR/blocks $CONFIG_DIR/chainstate > /dev/null 2>&1
+				sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1
 			fi
 		fi
 	fi
@@ -392,7 +392,7 @@ function create_conf() {
 		zelnodeoutpoint=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Collateral TX ID" 8 72 3>&1 1>&2 2>&3)
 		zelnodeindex=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Output Index usually a 0/1" 8 60 3>&1 1>&2 2>&3)
 	fi
-	mkdir /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+	mkdir $CONFIG_DIR > /dev/null 2>&1
 	flux_daemon_conf_create
 	if [[ "$IMPORT_ZELID" == "0" ]]; then
 		while true
@@ -532,8 +532,8 @@ function start_daemon() {
 	else
 		echo -e ""
 		echo -e "${WORNING} ${RED}Something is not right the daemon did not start or still loading...${NC}"
-		if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
-			error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
+		if [[ -f $CONFIG_DIR/debug.log ]]; then
+			error_line=$(egrep -a --color 'Error:' $CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
 			if [[ "$error_line" != "" ]]; then	  
 				echo -e "${WORNING} ${CYAN}Last error from ~/$CONFIG_DIR/debug.log: ${NC}"
 				echo -e "${WORNING} ${CYAN}$error_line${NC}"
@@ -671,7 +671,7 @@ selfhosting "install"
 install_process
 start_daemon
 log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
-log_rotate "Flux daemon" "daemon_debug_log" "/home/$USER/$CONFIG_DIR/debug.log" "daily" "7"
+log_rotate "Flux daemon" "daemon_debug_log" "$CONFIG_DIR/debug.log" "daily" "7"
 log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
 log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"
 basic_security

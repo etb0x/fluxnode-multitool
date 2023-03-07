@@ -460,9 +460,9 @@ function install_watchdog() {
 		telegram_bot_token=0;
 		telegram_chat_id=0;
 	fi
-	if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-		index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-		tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+	if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
+		index_from_file=$(grep -w zelnodeindex $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+		tx_from_file=$(grep -w zelnodeoutpoint $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
 		stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 		if [[ "$stak_info" == "" ]]; then
 			stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')

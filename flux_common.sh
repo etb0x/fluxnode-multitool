@@ -99,8 +99,8 @@ function fluxos_conf_create(){
 function flux_daemon_conf_create() {
 	RPCUSER=$(pwgen -1 8 -n)
 	PASSWORD=$(pwgen -1 20 -n)
-	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	cat <<- EOF > /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+	touch $CONFIG_DIR/$CONFIG_FILE
+	cat <<- EOF > $CONFIG_DIR/$CONFIG_FILE
 	rpcuser=$RPCUSER
 	rpcpassword=$PASSWORD
 	rpcallowip=127.0.0.1
@@ -320,7 +320,7 @@ function config_builder() {
   fi
   #####################################################
   if [[ "$4" == "daemon" ]]; then
-    if [[ ! -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+    if [[ ! -f $CONFIG_DIR/$CONFIG_FILE ]]; then
        padding "${ARROW}${GREEN} [Daemon] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
        return
     fi
@@ -328,19 +328,19 @@ function config_builder() {
        padding "${ARROW}${GREEN} [Daemon] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
        return
     fi
-    if [[ ! $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) && -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-      echo "$1=$2" >> /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-      if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+    if [[ ! $(grep -w $1 $CONFIG_DIR/$CONFIG_FILE) && -f $CONFIG_DIR/$CONFIG_FILE ]]; then
+      echo "$1=$2" >> $CONFIG_DIR/$CONFIG_FILE
+      if [[ "$1=$2" == $(grep -w $1 $CONFIG_DIR/$CONFIG_FILE) ]]; then
          padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
 	 return
       fi
     fi
-    if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+    if [[ "$1=$2" == $(grep -w $1 $CONFIG_DIR/$CONFIG_FILE) ]]; then
         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 skipped${NC}" "${X_MARK}"
 	return
     else
-       sed -i "s/$(grep -e $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE)/$1=$2/" /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-       if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+       sed -i "s/$(grep -e $1 $CONFIG_DIR/$CONFIG_FILE)/$1=$2/" $CONFIG_DIR/$CONFIG_FILE
+       if [[ "$1=$2" == $(grep -w $1 $CONFIG_DIR/$CONFIG_FILE) ]]; then
          padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
        fi
     fi
@@ -483,16 +483,16 @@ function config_smart_create() {
           rm -rf /home/$USER/install_conf.json
 	fi
         #daemon
-        if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+        if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
                 echo -e ""
                 echo -e "${ARROW} ${YELLOW}Imported daemon settings:${NC}"
-                zelnodeprivkey=$(grep -w zelnodeprivkey /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//' | sed 's/ //g')
+                zelnodeprivkey=$(grep -w zelnodeprivkey $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}"
                 smart_install_conf "prvkey" "$zelnodeprivkey" "$1"
-                zelnodeoutpoint=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//' | sed 's/ //g')
+                zelnodeoutpoint=$(grep -w zelnodeoutpoint $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Collateral TX ID = ${GREEN}$zelnodeoutpoint${NC}"
                 smart_install_conf "outpoint" "$zelnodeoutpoint" "$1"
-                zelnodeindex=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//' | sed 's/ //g')
+                zelnodeindex=$(grep -w zelnodeindex $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"
                 smart_install_conf "index" "$zelnodeindex" "$1"
         fi
@@ -641,7 +641,7 @@ function config_smart_create() {
 function manual_build(){
 	skip_zelcash_config='0'
 	skip_bootstrap='0'
-	if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+	if [[ -d $CONFIG_DIR ]]; then
 		if whiptail --yesno "Would you like import old settings from daemon and Flux?" 8 65; then
 			import_settings='1'
 			skip_zelcash_config='1'
@@ -1658,7 +1658,7 @@ function bootstrap_new() {
 		fi
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
-		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "$CONFIG_DIR"
 	else
 	  if [[ "$Mode" != "install" ]]; then
 			stop_service
@@ -1666,7 +1666,7 @@ function bootstrap_new() {
 		DOWNLOAD_URL="$bootstrap_url"
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
-		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "$CONFIG_DIR"
 	fi
 
 	if [[ "$Mode" != "install" ]]; then
@@ -1709,7 +1709,7 @@ function bootstrap_manual() {
 		if [[ "$Mode" != "install" ]]; then
 			stop_service
 		fi
-		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "$CONFIG_DIR"
 		sleep 1
 	;;
 	"2)")
@@ -1722,9 +1722,9 @@ function bootstrap_manual() {
 		fi
 		if [[ "$BOOTSTRAP_FILE" == *".zip"* ]]; then
 			echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-			unzip -o $BOOTSTRAP_FILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+			unzip -o $BOOTSTRAP_FILE -d $CONFIG_DIR > /dev/null 2>&1
 		else
-			tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+			tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "$CONFIG_DIR"
 			sleep 1
 		fi
 	;;
@@ -1740,7 +1740,7 @@ function bootstrap_local() {
 			if [[ "$Mode" != "install" ]]; then
 				stop_service
 			fi
-			tar_file_unpack "$FILE_PATH" "/home/$USER/$CONFIG_DIR"
+			tar_file_unpack "$FILE_PATH" "$CONFIG_DIR"
 		fi
 	fi
 }

@@ -360,7 +360,7 @@ fi
 skip_zelcash_config='0'
 skip_bootstrap='0'
 
-if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+if [[ -d $CONFIG_DIR ]]; then
 
   if whiptail --yesno "Would you like import old settings from daemon and Flux?" 8 65; then
      import_settings='1'
@@ -709,9 +709,9 @@ if [[ $telegram_alert == 0 ]]; then
 fi
 
 
-if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
 	
     if [[ "$stak_info" == "" ]]; then
@@ -787,9 +787,9 @@ function flux_daemon_bootstrap() {
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 
-    if [[ -e /home/$USER/$CONFIG_DIR/blocks ]] && [[ -e /home/$USER/$CONFIG_DIR/chainstate ]]; then
+    if [[ -e $CONFIG_DIR/blocks ]] && [[ -e $CONFIG_DIR/chainstate ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        rm -rf /home/$USER/$CONFIG_DIR/blocks /home/$USER/$CONFIG_DIR/chainstate /home/$USER/$CONFIG_DIR/determ_zelnodes
+        rm -rf $CONFIG_DIR/blocks $CONFIG_DIR/chainstate $CONFIG_DIR/determ_zelnodes
     fi
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
@@ -828,9 +828,9 @@ function flux_daemon_bootstrap() {
 	
         if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
             echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-            unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+            unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
         else
-            tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+            tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
             sleep 2  
         fi
 	
@@ -850,7 +850,7 @@ function flux_daemon_bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
 
 
@@ -869,9 +869,9 @@ function flux_daemon_bootstrap() {
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                    unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+                    unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi
 	    ;;

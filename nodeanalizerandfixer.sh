@@ -248,14 +248,14 @@ if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
 		echo -e ""
 	fi
 fi
-if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
+if [ -f $CONFIG_DIR/debug.log ]; then
 	echo -e "${BOOK} ${YELLOW}Checking Flux daemon ~/$CONFIG_DIR/debug.log${NC}"
 	if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log) != "0" ]]; then
-		echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
-		if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) != "0" ]]; then
+		echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' $CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' $CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
+		if [[ $(egrep -ac -wi --color 'benchmarking' $CONFIG_DIR/debug.log) != "0" ]]; then
 			echo -e "${BOOK} ${CYAN}FluxBench errors info:${NC}"
-			error_line=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-			event_date=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+			error_line=$(egrep -a --color 'benchmarking' $CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+			event_date=$(egrep -a --color 'benchmarking' $CONFIG_DIR/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 			echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 			event_time_uxtime=$(date -ud "$event_date" +"%s")
 			event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -267,7 +267,7 @@ if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
 			show_time "$tdiff"
 		fi
 		echo -e "${PIN} ${CYAN}Creating flux_daemon_debug_error.log${NC}"
-		egrep -a --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log > /home/$USER/flux_daemon_debug_error.log
+		egrep -a --color 'error|failed' $CONFIG_DIR/debug.log > /home/$USER/flux_daemon_debug_error.log
 		echo -e ""
 	else
 		echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -456,8 +456,8 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 		if [[ "$txhash" != "" ]]; then
 			stak_info=""
 
-			if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-				index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+			if [[ -f $CONFIG_DIR/$CONFIG_FILE ]]; then
+				index_from_file=$(grep -w zelnodeindex $CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 				stak_info=$(curl -s -m 10 https://$network_url_1/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 				if [[ "$stak_info" == "" ]]; then
 					stak_info=$(curl -s -m 10 https://$network_url_2/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')

@@ -42,7 +42,7 @@ PORT=16125
 
 function import_date() {
 
-if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
+if [[ -f $CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
     if [[ -z "$import_settings" ]]; then
 
@@ -313,9 +313,9 @@ if [[ "$telegram_alert" == 0 ]]; then
     telegram_chat_id=0;
 fi
 
-if [[ -f /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE ]]; then
-  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+if [[ -f $CONFIG_DIR/testnet/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex $CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint $CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
   stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
 	
     if [[ "$stak_info" == "" ]]; then
@@ -500,27 +500,27 @@ function wipe_clean() {
     fi
    
     
- if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+ if [[ -d $CONFIG_DIR ]]; then
     
     if [[ -z "$use_old_chain" ]]; then
     
     if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
     echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
-    sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1 && sleep 2
     
     else
         BOOTSTRAP_SKIP="1"
-	sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+	sudo rm -rf $CONFIG_DIR/fee_estimates.dat 
+	sudo rm -rf $CONFIG_DIR/peers.dat && sleep 1
+	sudo rm -rf $CONFIG_DIR/zelnode.conf 
+	sudo rm -rf $CONFIG_DIR/zelnodecache.dat && sleep 1
+	sudo rm -rf $CONFIG_DIR/zelnodepayments.dat
+	sudo rm -rf $CONFIG_DIR/db.log
+	sudo rm -rf $CONFIG_DIR/debug.log && sleep 1
+	sudo rm -rf $CONFIG_DIR/flux.conf && sleep 1
+	sudo rm -rf $CONFIG_DIR/database && sleep 1
+	sudo rm -rf $CONFIG_DIR/sporks && sleep 1
     fi
     
     else
@@ -528,22 +528,22 @@ function wipe_clean() {
     if [[ "$use_old_chain" == "1" ]]; then
     
       BOOTSTRAP_SKIP="1"
-      sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-      sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-      sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+      sudo rm -rf $CONFIG_DIR/fee_estimates.dat 
+      sudo rm -rf $CONFIG_DIR/peers.dat && sleep 1
+      sudo rm -rf $CONFIG_DIR/zelnode.conf 
+      sudo rm -rf $CONFIG_DIR/zelnodecache.dat && sleep 1
+      sudo rm -rf $CONFIG_DIR/zelnodepayments.dat
+      sudo rm -rf $CONFIG_DIR/db.log
+      sudo rm -rf $CONFIG_DIR/debug.log && sleep 1
+      sudo rm -rf $CONFIG_DIR/flux.conf && sleep 1
+      sudo rm -rf $CONFIG_DIR/database && sleep 1
+      sudo rm -rf $CONFIG_DIR/sporks && sleep 1
     
     else
     
       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
       sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
-      sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+      sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1 && sleep 2
       
     
     fi
@@ -805,9 +805,9 @@ function bootstrap() {
 	
             if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	        echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+                unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
             else
-                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
                 sleep 2  
 	    fi
 	
@@ -832,9 +832,9 @@ function bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
-        	#unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+        	#unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 
 
 	    ;;
@@ -846,13 +846,13 @@ function bootstrap() {
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                    unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+                    unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi
 		#echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-		#unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+		#unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 	    ;;
             esac
 
@@ -898,9 +898,9 @@ function bootstrap() {
 
                 if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	            echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                    unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+                    unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
                 else
-                    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+                    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
                     sleep 2  
 	        fi
 		
@@ -914,7 +914,7 @@ function bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
                 wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-		tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+		tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
 
 	    fi
@@ -922,7 +922,7 @@ function bootstrap() {
         else
 	
             if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
-                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
             else
                 BOOTSTRAP_ZIP="$bootstrap_url"
@@ -932,9 +932,9 @@ function bootstrap() {
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                    unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+                    unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi	
 		
@@ -1019,8 +1019,8 @@ function start_daemon() {
         echo
         echo -e "${WORNING} ${RED}Something is not right the daemon did not start or still loading...${NC}"
 	
-	if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
-	  error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
+	if [[ -f $CONFIG_DIR/debug.log ]]; then
+	  error_line=$(egrep -a --color 'Error:' $CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
 	     if [[ "$error_line" != "" ]]; then	  
 	       echo -e "${WORNING} ${CYAN}Last error from ~/$CONFIG_DIR/debug.log: ${NC}"
 	       echo -e "${WORNING} ${CYAN}$error_line${NC}"
@@ -1379,7 +1379,7 @@ else
     install_process
     start_daemon
     log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
-    log_rotate "Flux daemon" "daemon_debug_log" "/home/$USER/$CONFIG_DIR/debug.log" "daily" "7"
+    log_rotate "Flux daemon" "daemon_debug_log" "$CONFIG_DIR/debug.log" "daily" "7"
     log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
     log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"
     basic_security

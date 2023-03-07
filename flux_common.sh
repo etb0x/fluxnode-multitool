@@ -2529,7 +2529,7 @@ function multinode(){
 		exit
 	fi  
 	sleep 8
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
+	bash -i <(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
 }
 function install_watchtower(){
 	echo -e "${GREEN}Module: Install flux_watchtower for docker images autoupdate${NC}"
@@ -2578,5 +2578,5 @@ function analyzer_and_fixer(){
 		echo -e "${NC}"
 		exit
 	fi
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
+	bash -i <(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
 }

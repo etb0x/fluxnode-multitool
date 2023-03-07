@@ -1,14 +1,14 @@
 # MULTITOOLBOX FOR FLUXNODE OPERATORS
 
 <b>1) HOW RUN SCRIPT</b>  
-```bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```  
+```bash -i <(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/master/multitoolbox.sh)```  
 
 Note: If you are having difficulties, try fastgit.org provider
 
 ```bash -i <(curl -s https://raw.fastgit.org/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```
 
 <b>2) MENU:</b>    
-![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/development.jpg) 
+![screen1](https://raw.githubusercontent.com/etb0x/fluxnode-multitool/master/image/development.jpg) 
 
 <b>3) HOW USE MULTITOOLBOX TO SETUP FLUXNODE:</b>  
  https://medium.com/zelinsights/zelnode-setup-the-easy-peasy-lemon-squeezy-way-fd89706ea03c <br>

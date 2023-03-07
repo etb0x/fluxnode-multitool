@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 #const
 REPLACE="0"
@@ -627,7 +627,7 @@ if [[ -d /home/$USER/$FLUX_DIR ]]; then
 	FILE=/home/$USER/$FLUX_DIR/config/userconfig.js
 	if [[ -f "$FILE" ]]; then
 		current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-		required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/RunOnFlux/flux/master/package.json | jq -r '.version')
+		required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/etb0x/flux/master/package.json | jq -r '.version')
 		if [[ "$required_ver" != "" ]]; then
 			if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
 					echo -e "${CHECK_MARK} ${CYAN} You have the current version of FluxOS ${GREEN}(v$required_ver)${NC}"     
@@ -697,7 +697,7 @@ if [[ -f /home/$USER/watchdog/package.json ]]; then
 	echo -e ""
 	echo -e "${BOOK} ${YELLOW}Checking Watchdog:${NC}"
 	current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
-	required_ver=$(curl -sS https://raw.githubusercontent.com/RunOnFlux/fluxnode-watchdog/master/package.json | jq -r '.version')
+	required_ver=$(curl -sS https://raw.githubusercontent.com/etb0x/fluxnode-watchdog/master/package.json | jq -r '.version')
 	if [[ "$required_ver" != "" ]]; then
 		if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
 			echo -e "${CHECK_MARK} ${CYAN} You have the current version of Watchdog ${GREEN}(v$required_ver)${NC}"     
@@ -728,7 +728,7 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
 		current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-		required_ver=$(curl -sS https://raw.githubusercontent.com/RunOnFlux/flux/master/package.json | jq -r '.version')
+		required_ver=$(curl -sS https://raw.githubusercontent.com/etb0x/flux/master/package.json | jq -r '.version')
 		if [[ "$required_ver" == "$current_ver" ]]; then
 			echo -e "${CHECK_MARK} ${CYAN}Flux updated successfully.${NC}"
 			echo -e ""

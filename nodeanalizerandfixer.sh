@@ -35,7 +35,7 @@ else
 	BENCH_CLI='zelbench-cli'
 fi
 
-if [[ -d /home/$USER/.zelcash ]]; then
+if [[ -d /mnt/volume_lon1_09/.zelcash ]]; then
 	CONFIG_DIR='.zelcash'
 	CONFIG_FILE='zelcash.conf'
 else
@@ -43,7 +43,7 @@ else
 	CONFIG_FILE='flux.conf'
 fi
 
-if [[ -d /home/$USER/.zelbenchmark ]]; then
+if [[ -d /mnt/volume_lon1_09/.zelbenchmark ]]; then
 	BENCH_DIR_LOG='.zelbenchmark'
 else
 	BENCH_DIR_LOG='.fluxbenchmark'
@@ -80,9 +80,9 @@ function check_listen_ports(){
 	if ! lsof -v > /dev/null 2>&1; then
 		sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 1
 	fi
-	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-		FluxAPI=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
-		FLUXOS_CONFIG=$(grep -Po "$FluxAPI" /home/$USER/zelflux/config/userconfig.js)
+	if [[ -f /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf ]]; then
+		FluxAPI=$(grep -Po "(?<=fluxport=)\d+" /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf)
+		FLUXOS_CONFIG=$(grep -Po "$FluxAPI" /mnt/volume_lon1_09/zelflux/config/userconfig.js)
 		if [[ "$FLUXOS_CONFIG" != "" ]]; then
 			FluxUI=$(($FluxAPI-1))
 			UPNP=1
@@ -135,8 +135,8 @@ function check_listen_ports(){
 	fi
 	echo -e "${PIN} ${CYAN}FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
 	echo -e "${PIN} ${CYAN}FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
-	if [[ -f /home/$USER/.pm2/logs/flux-out.log ]]; then
-	error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
+	if [[ -f /mnt/volume_lon1_09/.pm2/logs/flux-out.log ]]; then
+	error_check=$(tail -n10 /mnt/volume_lon1_09/.pm2/logs/flux-out.log | grep "UPnP failed")
 		if [[ "$error_check" != "" ]]; then
 			echo -e ""
 			echo -e "${ARROW} ${YELLOW}Checking FluxOS logs... ${NC}"
@@ -148,7 +148,7 @@ function check_listen_ports(){
 function get_last_benchmark(){
 	if [[ "$2" == "check" ]]; then
 	
-		info_check=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
+		info_check=$(grep 'Found' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
 		if [[ "$info_check"  == "" ]]; then
 			skipp_debug=1
 			return 1
@@ -158,13 +158,13 @@ function get_last_benchmark(){
 
 
 	if [[ "$1" == "cores" ]]; then
-			cores=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep 'cores' | tail -n1 | egrep -Eo '[^ ]+$')
+			cores=$(grep 'Found' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep 'cores' | tail -n1 | egrep -Eo '[^ ]+$')
 			echo -e "${PIN}${CYAN} CORES: ${GREEN}$cores${NC}"
 	fi
 
 	if [[ "$1" == "HDD" ||  "$1" == "DD_WRITE" || "$1" == "ram" || "$1" == "eps" ]] && [[ "$2" != "check" ]]; then
 
-		info=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
+		info=$(grep 'Found' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
 
 		if [[ "$1" == "ram" ]]; then
 			echo -e "${PIN}${CYAN} RAM: ${GREEN}$info${NC}"
@@ -214,13 +214,13 @@ if ! bc -v > /dev/null 2>&1 ; then
 	sudo apt install -y bc > /dev/null 2>&1 && sleep 1
 fi
 echo -e "${NC}"
-if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
+if [ -f /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log ]; then
 	echo -e "${BOOK} ${YELLOW}Checking Flux benchmark $BENCH_DIR_LOG/debug.log${NC}"
-	if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
-		echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
+	if [[ $(egrep -ac -wi --color 'Failed' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
+		echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
 		#egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
-		error_line=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-		event_date=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+		error_line=$(egrep -a --color 'Failed' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+		event_date=$(egrep -a --color 'Failed' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 		echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 		event_time_uxtime=$(date -ud "$event_date" +"%s")
 		event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -231,7 +231,7 @@ if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
 		tdiff=$((now_date-event_time))
 		show_time "$tdiff"
 		echo -e "${PIN} ${CYAN}Creating Flux benchmark_debug_error.log${NC}"
-		egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log > /home/$USER/benchmark_debug_error.log
+		egrep -a --color 'Failed' /mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log > /mnt/volume_lon1_09/benchmark_debug_error.log
 		echo -e ""
 	else
 		echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -250,7 +250,7 @@ if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
 fi
 if [ -f $CONFIG_DIR/debug.log ]; then
 	echo -e "${BOOK} ${YELLOW}Checking Flux daemon ~/$CONFIG_DIR/debug.log${NC}"
-	if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log) != "0" ]]; then
+	if [[ $(egrep -ac -wi --color 'error|failed' /mnt/volume_lon1_09//$CONFIG_DIR/debug.log) != "0" ]]; then
 		echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' $CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' $CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
 		if [[ $(egrep -ac -wi --color 'benchmarking' $CONFIG_DIR/debug.log) != "0" ]]; then
 			echo -e "${BOOK} ${CYAN}FluxBench errors info:${NC}"
@@ -267,7 +267,7 @@ if [ -f $CONFIG_DIR/debug.log ]; then
 			show_time "$tdiff"
 		fi
 		echo -e "${PIN} ${CYAN}Creating flux_daemon_debug_error.log${NC}"
-		egrep -a --color 'error|failed' $CONFIG_DIR/debug.log > /home/$USER/flux_daemon_debug_error.log
+		egrep -a --color 'error|failed' $CONFIG_DIR/debug.log > /mnt/volume_lon1_09/flux_daemon_debug_error.log
 		echo -e ""
 	else
 		echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -623,10 +623,10 @@ if [[ $(curl -s -m 5 --head "$WANIP:$FluxUI" | head -n 1 | grep "200 OK") ]]; th
 else
 	echo -e "${X_MARK} ${CYAN} FluxOS front is not working${NC}"
 fi
-if [[ -d /home/$USER/$FLUX_DIR ]]; then
-	FILE=/home/$USER/$FLUX_DIR/config/userconfig.js
+if [[ -d /mnt/volume_lon1_09/$FLUX_DIR ]]; then
+	FILE=/mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js
 	if [[ -f "$FILE" ]]; then
-		current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+		current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 		required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/etb0x/flux/master/package.json | jq -r '.version')
 		if [[ "$required_ver" != "" ]]; then
 			if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
@@ -637,7 +637,7 @@ if [[ -d /home/$USER/$FLUX_DIR ]]; then
 			fi
 		fi
 		echo -e "${CHECK_MARK} ${CYAN} FluxOS config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
-		ZELIDLG=`echo -n $(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e "s/'//g" | sed -e "s/,//g" | sed -e "s/.*zelid://g") | wc -m`
+		ZELIDLG=`echo -n $(grep -w zelid /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e "s/'//g" | sed -e "s/,//g" | sed -e "s/.*zelid://g") | wc -m`
 		if [[ "$ZELIDLG" -eq "35" || "$ZELIDLG" -eq "34" || "$ZELIDLG" -eq "33" ]]; then
 		echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
 		elif [[ "$ZELIDLG" == "0" || "$ZELIDLG" == "2" ]]; then
@@ -649,10 +649,10 @@ if [[ -d /home/$USER/$FLUX_DIR ]]; then
 		if [[ -f ~/$FLUX_DIR/error.log ]]; then
 			echo -e ""
 			echo -e "${BOOK} ${YELLOW}FluxOS error.log file detected, check ~/zelflux/error.log"
-			echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/$FLUX_DIR/error.log)${CYAN} error events${NC}"
-			error_line=$(cat /home/$USER/$FLUX_DIR/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
+			echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /mnt/volume_lon1_09/$FLUX_DIR/error.log)${CYAN} error events${NC}"
+			error_line=$(cat /mnt/volume_lon1_09/$FLUX_DIR/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
 			echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-			event_date=$(cat /home/$USER/$FLUX_DIR/error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
+			event_date=$(cat /mnt/volume_lon1_09/$FLUX_DIR/error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
 			event_time_uxtime=$(date -d "$event_date" +"%s")
 			event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 			event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -693,10 +693,10 @@ if [[ "$ZELCONF" == "1" ]]; then
 	fi
 
 fi
-if [[ -f /home/$USER/watchdog/package.json ]]; then
+if [[ -f /mnt/volume_lon1_09/watchdog/package.json ]]; then
 	echo -e ""
 	echo -e "${BOOK} ${YELLOW}Checking Watchdog:${NC}"
-	current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+	current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 	required_ver=$(curl -sS https://raw.githubusercontent.com/etb0x/fluxnode-watchdog/master/package.json | jq -r '.version')
 	if [[ "$required_ver" != "" ]]; then
 		if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
@@ -706,13 +706,13 @@ if [[ -f /home/$USER/watchdog/package.json ]]; then
 		fi
 	fi
 fi
-if [[ -f /home/$USER/watchdog/watchdog_error.log ]]; then
+if [[ -f /mnt/volume_lon1_09/watchdog/watchdog_error.log ]]; then
 	echo -e ""
 	echo -e "${BOOK} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
-	echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/watchdog/watchdog_error.log)${CYAN} error events${NC}"
-	error_line=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+	echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /mnt/volume_lon1_09/watchdog/watchdog_error.log)${CYAN} error events${NC}"
+	error_line=$(cat /mnt/volume_lon1_09/watchdog/watchdog_error.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 	echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-	event_date=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}' | head -n1)
+	event_date=$(cat /mnt/volume_lon1_09/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}' | head -n1)
 	event_time_uxtime=$(date -ud "$event_date" +"%s")
 	event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 	event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -726,8 +726,8 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
 	read -p "Would you like to update Flux Y/N?" -n 1 -r
 	echo -e ""
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
-		current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+		cd /mnt/volume_lon1_09/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
+		current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 		required_ver=$(curl -sS https://raw.githubusercontent.com/etb0x/flux/master/package.json | jq -r '.version')
 		if [[ "$required_ver" == "$current_ver" ]]; then
 			echo -e "${CHECK_MARK} ${CYAN}Flux updated successfully.${NC}"

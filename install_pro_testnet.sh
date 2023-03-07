@@ -42,7 +42,7 @@ PORT=16125
 
 function import_date() {
 
-if [[ -f $CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
+if [[ -f $CONFIG_DIR/$CONFIG_FILE || -f /mnt/volume_lon1_09/.zelcash/zelcash.conf ]]; then
 
     if [[ -z "$import_settings" ]]; then
 
@@ -50,7 +50,7 @@ if [[ -f $CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; th
 	
 	    OLD_CONFIG=0
 	
-	    if [[ -d /home/$USER/.zelcash ]]; then
+	    if [[ -d /mnt/volume_lon1_09/.zelcash ]]; then
 	     CONFIG_DIR='.zelcash'
 	     CONFIG_FILE='zelcash.conf' 
 	     OLD_CONFIG=1
@@ -94,7 +94,7 @@ else
     
             OLD_CONFIG=0
 	
-	    if [[ -d /home/$USER/.zelcash ]]; then
+	    if [[ -d /mnt/volume_lon1_09/.zelcash ]]; then
 	     CONFIG_DIR='.zelcash'
 	     CONFIG_FILE='zelcash.conf' 
 	     OLD_CONFIG=1
@@ -148,8 +148,8 @@ echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
 wget https://raw.githubusercontent.com/etb0x/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
-mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
-sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
+mv post-merge /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
+sudo chmod +x /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
@@ -336,9 +336,9 @@ eps_limit=0;
 fi
 
 
-sudo touch /home/$USER/watchdog/config.js
-sudo chown $USER:$USER /home/$USER/watchdog/config.js
-    cat << EOF >  /home/$USER/watchdog/config.js
+sudo touch /mnt/volume_lon1_09/watchdog/config.js
+sudo chown $USER:$USER /mnt/volume_lon1_09/watchdog/config.js
+    cat << EOF >  /mnt/volume_lon1_09/watchdog/config.js
 module.exports = {
     label: '${node_label}',
     tier_eps_min: '${eps_limit}',
@@ -355,11 +355,11 @@ module.exports = {
 EOF
 
 echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
-pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
-if [[ -f /home/$USER/watchdog/watchdog.js ]]
+if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]
 then
-current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 #echo -e "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed successful.${NC}"
 string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
 else
@@ -387,14 +387,14 @@ function mongodb_bootstrap(){
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
     wget --tries=5 $BOOTSTRAP_URL_MONGOD -q --show-progress 
     
-    if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
+    if [[ -f /mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
     
         echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-        tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+        tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /mnt/volume_lon1_09 > /dev/null 2>&1 && sleep 1
         echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+        mongorestore --port 27017 --db zelcashdata /mnt/volume_lon1_09/dump/zelcashdata --drop > /dev/null 2>&1
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+        sudo rm -rf /mnt/volume_lon1_09/dump > /dev/null 2>&1 && sleep 1
         sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
 
 
@@ -487,15 +487,15 @@ function wipe_clean() {
     #sudo rm -rf ~/.zelcash/determ_zelnodes ~/.zelcash/sporks ~/$CONFIG_DIR/database ~/.zelcash/blocks ~/.zelcashchainstate  > /dev/null 2>&1 && sleep 1
     #sudo rm -rf ~/.zelcash  > /dev/null 2>&1 && sleep 1
     sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
-    sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
-    sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
+    sudo rm -rf /mnt/volume_lon1_09/stop_zelcash_service.sh > /dev/null 2>&1
+    sudo rm -rf /mnt/volume_lon1_09/start_zelcash_service.sh > /dev/null 2>&1
     
-    if [[ -d /home/$USER/.zelcash  ]]; then
+    if [[ -d /mnt/volume_lon1_09/.zelcash  ]]; then
     
       echo -e "${ARROW} ${CYAN}Moving ~/.zelcash to ~/.flux${NC}"  
       #echo -e "${ARROW} ${CYAN}Renaming zelcash.conf to flux.conf${NC}"  
-      sudo mv /home/$USER/.zelcash /home/$USER/.flux > /dev/null 2>&1 && sleep 1
-      sudo mv /home/$USER/.flux/zelcash.conf /home/$USER/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
+      sudo mv /mnt/volume_lon1_09/.zelcash /mnt/volume_lon1_09/.flux > /dev/null 2>&1 && sleep 1
+      sudo mv /mnt/volume_lon1_09/.flux/zelcash.conf /mnt/volume_lon1_09/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
         
     fi
    
@@ -551,9 +551,9 @@ function wipe_clean() {
     fi
 fi
 
-    sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
-    sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1
-    sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1
+    sudo rm -rf /mnt/volume_lon1_09/watchdog > /dev/null 2>&1
+    sudo rm -rf /mnt/volume_lon1_09/stop_daemon_service.sh > /dev/null 2>&1
+    sudo rm -rf /mnt/volume_lon1_09/start_daemon_service.sh > /dev/null 2>&1
     echo -e ""
   
   echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
@@ -773,7 +773,7 @@ function bootstrap() {
         fi
 
 
-        if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then		   
+        if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then		   
 	
             if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	
@@ -794,20 +794,20 @@ function bootstrap() {
                fi
 	    
 	    else	    
-                check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"
+                check_tar "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE"
 	    fi
 	    
 	fi
 
 
-        if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+        if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
 	
 	
             if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	        echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
                 unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
             else
-                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+                tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
                 sleep 2  
 	    fi
 	
@@ -832,7 +832,7 @@ function bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
+	        tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
         	#unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 
@@ -848,7 +848,7 @@ function bootstrap() {
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
                     unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+		    tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi
 		#echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
@@ -865,7 +865,7 @@ function bootstrap() {
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
         fi
 
-        if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+        if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
 	
             if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	
@@ -886,7 +886,7 @@ function bootstrap() {
                fi
 	    
 	    else	    
-                check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"
+                check_tar "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE"
 	    fi
 	    
 	fi
@@ -894,13 +894,13 @@ function bootstrap() {
 
         if [[ "$bootstrap_url" == "" ]]; then
 
-            if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+            if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
 
                 if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
 	            echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
                     unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
                 else
-                    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+                    tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
                     sleep 2  
 	        fi
 		
@@ -914,15 +914,15 @@ function bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
                 wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-		tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
+		tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
 
 	    fi
 	    
         else
 	
-            if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
-                tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
+            if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
+                tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
             else
                 BOOTSTRAP_ZIP="$bootstrap_url"
@@ -934,7 +934,7 @@ function bootstrap() {
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
                     unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+		    tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi	
 		
@@ -1194,7 +1194,7 @@ EOF
 
 if [ -d ~/$FLUX_DIR ]
 then
-current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 
 string_limit_check_mark "Flux v$current_ver installed................................." "Flux ${GREEN}v$current_ver${CYAN} installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
@@ -1378,7 +1378,7 @@ else
     
     install_process
     start_daemon
-    log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
+    log_rotate "Flux benchmark" "bench_debug_log" "/mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log" "monthly" "2"
     log_rotate "Flux daemon" "daemon_debug_log" "$CONFIG_DIR/debug.log" "daily" "7"
     log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
     log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"

@@ -23,7 +23,7 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIP='http://202.61.207.10:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=a705701758411b28ea20325ef9654e31e3d8f5f03a24b4e4e662e601a1250859'
 
-if [[ -d /home/$USER/.zelcash ]]; then
+if [[ -d /mnt/volume_lon1_09/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
    CONFIG_FILE='zelcash.conf'
     
@@ -45,21 +45,21 @@ zelflux_setting_import="0"
 
 function config_file() {
 
-if [[ -f /home/$USER/install_conf.json ]]; then
-import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
-firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
-bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
-bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
-swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
-mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
-watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
-use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
-prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
-outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
-index=$(cat /home/$USER/install_conf.json | jq -r '.index')
-zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
-kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+if [[ -f /mnt/volume_lon1_09/install_conf.json ]]; then
+import_settings=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.import_settings')
+ssh_port=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.ssh_port')
+firewall_disable=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.firewall_disable')
+bootstrap_url=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.bootstrap_url')
+bootstrap_zip_del=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.bootstrap_zip_del')
+swapon=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.swapon')
+mongo_bootstrap=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.mongo_bootstrap')
+watchdog=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.watchdog')
+use_old_chain=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.use_old_chain')
+prvkey=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.prvkey')
+outpoint=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.outpoint')
+index=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.index')
+zel_id=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.zelid')
+kda_address=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.kda_address')
 
 echo -e "${ARROW} ${YELLOW}Install config summary:"
 
@@ -169,15 +169,15 @@ sudo umount -l $line && sleep 1
 done
 fi
 
-if [ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]; then
+if [ -f /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js ]; then
 
     echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
-    zel_id=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-    WANIP=$(grep -w ipaddress /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
+    zel_id=$(grep -w zelid /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+    WANIP=$(grep -w ipaddress /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
     
     echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$zel_id${NC}" && sleep 1
     
-    KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+    KDA_A=$(grep -w kadena /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
     
     if [[ "$KDA_A" != "" ]]; then
     
@@ -195,7 +195,7 @@ if [ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]; then
 
 fi
 
-if [ -d /home/$USER/$FLUX_DIR ]; then
+if [ -d /mnt/volume_lon1_09/$FLUX_DIR ]; then
 
     echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
     #sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
@@ -210,11 +210,11 @@ echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
 git checkout testnet > /dev/null 2>&1
 #git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
-if [ -d /home/$USER/$FLUX_DIR ]
+if [ -d /mnt/volume_lon1_09/$FLUX_DIR ]
 then
 
-if [[ -f /home/$USER/$FLUX_DIR/package.json ]]; then
-  current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+if [[ -f /mnt/volume_lon1_09/$FLUX_DIR/package.json ]]; then
+  current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 else
   string_limit_x_mark "Flux was not downloaded, run script again..........................................."
   echo
@@ -291,7 +291,7 @@ fi
 
 fi
    
-if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+if [[ -f /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js ]]; then
 string_limit_check_mark "Flux configuration successfull..........................................."
 else
 string_limit_x_mark "Flux installation failed, missing config file..........................................."
@@ -308,7 +308,7 @@ fi
    echo -e "${ARROW} ${CYAN}Starting Flux....${NC}"
    echo -e "${ARROW} ${CYAN}Flux loading will take 2-3min....${NC}"
    echo
-   pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+   pm2 start /mnt/volume_lon1_09/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    pm2 list
 
@@ -479,10 +479,10 @@ watchdog='0'
 sleep 1
 fi
 
-rm /home/$USER/install_conf.json > /dev/null 2>&1
-sudo touch /home/$USER/install_conf.json
-sudo chown $USER:$USER /home/$USER/install_conf.json
-    cat << EOF > /home/$USER/install_conf.json
+rm /mnt/volume_lon1_09/install_conf.json > /dev/null 2>&1
+sudo touch /mnt/volume_lon1_09/install_conf.json
+sudo chown $USER:$USER /mnt/volume_lon1_09/install_conf.json
+    cat << EOF > /mnt/volume_lon1_09/install_conf.json
 {
   "import_settings": "${import_settings}",
   "prvkey": "${prvkey}",
@@ -533,14 +533,14 @@ fi
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
-sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
+sudo rm -rf /mnt/volume_lon1_09/watchdog  > /dev/null 2>&1
 
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
 wget https://raw.githubusercontent.com/etb0x/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
-mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
-sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
+mv post-merge /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
+sudo chmod +x /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
@@ -732,9 +732,9 @@ eps_limit=0;
 fi
 
 
-sudo touch /home/$USER/watchdog/config.js
-sudo chown $USER:$USER /home/$USER/watchdog/config.js
-    cat << EOF >  /home/$USER/watchdog/config.js
+sudo touch /mnt/volume_lon1_09/watchdog/config.js
+sudo chown $USER:$USER /mnt/volume_lon1_09/watchdog/config.js
+    cat << EOF >  /mnt/volume_lon1_09/watchdog/config.js
 module.exports = {
     label: '${node_label}',
     tier_eps_min: '${eps_limit}',
@@ -751,11 +751,11 @@ module.exports = {
 EOF
 
 echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
-pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
-if [[ -f /home/$USER/watchdog/watchdog.js ]]
+if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]
 then
-current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 #echo -e "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed successful.${NC}"
 string_limit_check_mark "Watchdog v$current_ver installed..........................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed..........................................."
 else
@@ -794,7 +794,7 @@ function flux_daemon_bootstrap() {
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
-    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
     
      echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
 	
@@ -817,20 +817,20 @@ function flux_daemon_bootstrap() {
             fi
 	    
         else	    
-                check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"
+                check_tar "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE"
         fi
 	    
     fi
 
 
-    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    if [ -f "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" ]; then
 	
 	
         if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
             echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
             unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
         else
-            tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+            tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
             sleep 2  
         fi
 	
@@ -850,7 +850,7 @@ function flux_daemon_bootstrap() {
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
+	        tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR" 
 		sleep 2
 
 
@@ -871,7 +871,7 @@ function flux_daemon_bootstrap() {
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
                     unzip -o $BOOTSTRAP_ZIPFILE -d $CONFIG_DIR > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
+		    tar_file_unpack "/mnt/volume_lon1_09/$BOOTSTRAP_ZIPFILE" "$CONFIG_DIR"
 		    sleep 2
 		fi
 	    ;;

@@ -18,7 +18,7 @@ fi
 
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
-if [[ -d /home/$USER/.zelcash ]]; then
+if [[ -d /mnt/volume_lon1_09/.zelcash ]]; then
 	CONFIG_DIR='.zelcash'
 	CONFIG_FILE='zelcash.conf'
 else
@@ -50,19 +50,19 @@ function config_veryfity(){
 	fi
 }
 function config_file() {
-	if [[ -f /home/$USER/install_conf.json ]]; then
+	if [[ -f /mnt/volume_lon1_09/install_conf.json ]]; then
 
-		import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-		bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
-		bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
-		use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
-		prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
-		outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
-		index=$(cat /home/$USER/install_conf.json | jq -r '.index')
-		zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
-		kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
-		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
-    gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
+		import_settings=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.import_settings')
+		bootstrap_url=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.bootstrap_url')
+		bootstrap_zip_del=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.bootstrap_zip_del')
+		use_old_chain=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.use_old_chain')
+		prvkey=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.prvkey')
+		outpoint=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.outpoint')
+		index=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.index')
+		zel_id=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.zelid')
+		kda_address=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.kda_address')
+		upnp_port=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.upnp_port')
+    gateway_ip=$(cat /mnt/volume_lon1_09/install_conf.json | jq -r '.gateway_ip')
 
 		echo -e "${ARROW} ${YELLOW}Install config summary:"
 		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
@@ -147,18 +147,18 @@ function install_flux() {
 		done
 	fi
 
-	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+	if [[ -f /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js ]]; then
 		echo -e "${ARROW} ${CYAN}Import settings...${NC}"
-		ZELID=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-		WANIP=$(grep -w ipaddress /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
+		ZELID=$(grep -w zelid /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+		WANIP=$(grep -w ipaddress /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
 		echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
-		KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+		KDA_A=$(grep -w kadena /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 		if [[ "$KDA_A" != "" ]]; then
 			echo -e "${PIN}${CYAN}Kadena address = ${GREEN}$KDA_A${NC}"
 		fi
 		echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}"  
 		
-		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
+		upnp_port=$(grep -w apiport /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
 		if [[ "$upnp_port" != "" ]]; then
                         echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
                 fi
@@ -171,16 +171,16 @@ function install_flux() {
 		fi
 	fi
 
-	if [ -d /home/$USER/$FLUX_DIR ]; then
+	if [ -d /mnt/volume_lon1_09/$FLUX_DIR ]; then
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
 	fi
 
 	echo -e "${ARROW} ${CYAN}FluxOS downloading...${NC}"
 	git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 1
-	if [[ -d /home/$USER/$FLUX_DIR ]]; then
-		if [[ -f /home/$USER/$FLUX_DIR/package.json ]]; then
-			current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+	if [[ -d /mnt/volume_lon1_09/$FLUX_DIR ]]; then
+		if [[ -f /mnt/volume_lon1_09/$FLUX_DIR/package.json ]]; then
+			current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 		else
 			string_limit_x_mark "FluxOS was not downloaded, run script again..........................................."
 			echo
@@ -222,7 +222,7 @@ function install_flux() {
 		done	 
 	fi
 	fluxos_conf_create
-	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then	
+	if [[ -f /mnt/volume_lon1_09/$FLUX_DIR/config/userconfig.js ]]; then	
 	        if [[ "$upnp_port" != "" ]]; then
                   config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
 		fi
@@ -241,7 +241,7 @@ function install_flux() {
 		echo -e "${ARROW} ${CYAN}Starting FluxOS....${NC}"
 		echo -e "${ARROW} ${CYAN}FluxOS loading will take 2-3min....${NC}"
 		echo -e ""
-		pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+		pm2 start /mnt/volume_lon1_09/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 		pm2 save > /dev/null 2>&1
 		pm2 list
 	else
@@ -319,13 +319,13 @@ function install_watchdog() {
 	echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 	pm2 del watchdog  > /dev/null 2>&1
 	pm2 save  > /dev/null 2>&1
-	sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
+	sudo rm -rf /mnt/volume_lon1_09/watchdog  > /dev/null 2>&1
 	echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 	cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 	echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
 	wget https://raw.githubusercontent.com/etb0x/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
-	mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
-	sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
+	mv post-merge /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
+	sudo chmod +x /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
 	echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 	cd watchdog && npm install > /dev/null 2>&1
 	echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
@@ -479,10 +479,10 @@ function install_watchdog() {
 	fi
 	watchdog_conf_create
 	echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
-	pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+	pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 	pm2 save > /dev/null 2>&1
-	if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
-		current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+	if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]; then
+		current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 		string_limit_check_mark "Watchdog v$current_ver installed..........................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed..........................................."  
 	else
 		string_limit_x_mark "Watchdog was not installed..........................................."
@@ -710,9 +710,9 @@ function mongod_db_fix() {
 			echo -e "${ARROW} ${YELLOW}Hard repair starting... ${NC}" 
 			echo -e "${ARROW} ${CYAN}Stopping mongod service...${NC}" 
 			sudo systemctl stop mongod 
-			#sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			#sudo rm -rf /mnt/volume_lon1_09/mongoDB_backup.gz > /dev/null 2>&1
 			#echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
-                        #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+                        #mongodump --archive=/mnt/volume_lon1_09/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
 			sudo apt-get purge mongodb-org* -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
@@ -738,7 +738,7 @@ function mongod_db_fix() {
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
 			fluxos_clean
 		        #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
-			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			#mongorestore --drop --archive=/mnt/volume_lon1_09/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
 			if mongod --version > /dev/null 2>&1; then
@@ -754,13 +754,13 @@ function mongod_db_fix() {
 }
 function node_reconfiguration() {
 	reset=""
-	if [[ -f /home/$USER/install_conf.json ]]; then
+	if [[ -f /mnt/volume_lon1_09/install_conf.json ]]; then
 		import_config_file "silent"
 		get_ip
-		if [[ -d /home/$USER/zelflux ]]; then	  
+		if [[ -d /mnt/volume_lon1_09/zelflux ]]; then	  
 			if [[ "$KDA_A" != "" && "$ZELID" != "" ]]; then
 				echo -e "${ARROW} ${CYAN}Creating FluxOS config file...${NC}"
-				sudo rm -rf /home/$USER/zelflux/config/userconfig.js > /dev/null 2>&1
+				sudo rm -rf /mnt/volume_lon1_09/zelflux/config/userconfig.js > /dev/null 2>&1
 				fluxos_conf_create
 				reset=0
 			fi
@@ -776,9 +776,9 @@ function node_reconfiguration() {
 				reset=0
 			fi
 		fi
-		if [[ -d /home/$USER/watchdog ]]; then
+		if [[ -d /mnt/volume_lon1_09/watchdog ]]; then
 			echo -e "${ARROW} ${CYAN}Creating Watchdog config file...${NC}"
-			sudo rm -rf /home/$USER/watchdog/config.js > /dev/null 2>&1
+			sudo rm -rf /mnt/volume_lon1_09/watchdog/config.js > /dev/null 2>&1
 			fix_action='1'
   			watchdog_conf_create
 			reset=0

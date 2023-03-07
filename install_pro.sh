@@ -27,9 +27,9 @@ ZELNODEPORT=16128
 
 
 function config_veryfity(){
-  if [[ -f /home/$USER/.flux/flux.conf ]]; then
+  if [[ -f /mnt/volume_lon1_09/.flux/flux.conf ]]; then
 	echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
-	insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+	insightexplorer=$(cat /mnt/volume_lon1_09/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
 	if [[ "$insightexplorer" == "1" ]]; then
 		echo -e "${ARROW} ${CYAN}Insightexplorer enabled.................[${CHECK_MARK}${CYAN}]${NC}"
 	else
@@ -69,17 +69,17 @@ function install_watchdog() {
 		WATCHDOG_INSTALL="1"
 		cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 		wget https://raw.githubusercontent.com/etb0x/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
-		mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
-		sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
+		mv post-merge /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
+		sudo chmod +x /mnt/volume_lon1_09/watchdog/.git/hooks/post-merge
 		cd watchdog && npm install > /dev/null 2>&1
 		echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 		fix_action='1'
-		if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
+		if [[ "$import_settings" == "0"  && -f /mnt/volume_lon1_09/install_conf.json ]]; then
 			watchdog_conf_create
-			if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
-				current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+			if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]; then
+				current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 				string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
-				pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+				pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 				pm2 save > /dev/null 2>&1
 			else
 				string_limit_x_mark "Watchdog was not installed................................."
@@ -88,10 +88,10 @@ function install_watchdog() {
 		fi
 		if [[ "$IMPORT_ZELCONF" == "1" ]]; then
 			watchdog_conf_create
-			if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
-				current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+			if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]; then
+				current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 				string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
-				pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+				pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 				pm2 save > /dev/null 2>&1
 			else
 				string_limit_x_mark "Watchdog was not installed................................."
@@ -233,10 +233,10 @@ function install_watchdog() {
 			eps_limit=0;
 		fi
 		watchdog_conf_create
-		pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+		pm2 start /mnt/volume_lon1_09/watchdog/watchdog.js --name watchdog --watch /mnt/volume_lon1_09/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 		pm2 save > /dev/null 2>&1
-		if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
-			current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+		if [[ -f /mnt/volume_lon1_09/watchdog/watchdog.js ]]; then
+			current_ver=$(jq -r '.version' /mnt/volume_lon1_09/watchdog/package.json)
 			string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
 		else
 			string_limit_x_mark "Watchdog was not installed................................."
@@ -301,12 +301,12 @@ function wipe_clean() {
 	sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 1
 	sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
 	sudo rm -rf .fluxbenchmark  > /dev/null 2>&1 && sleep 1
-	sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
-	sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
-	if [[ -d /home/$USER/.zelcash  ]]; then
+	sudo rm -rf /mnt/volume_lon1_09/stop_zelcash_service.sh > /dev/null 2>&1
+	sudo rm -rf /mnt/volume_lon1_09/start_zelcash_service.sh > /dev/null 2>&1
+	if [[ -d /mnt/volume_lon1_09/.zelcash  ]]; then
 		echo -e "${ARROW} ${CYAN}Moving ~/.zelcash to ~/.flux${NC}"   
-		sudo mv /home/$USER/.zelcash /home/$USER/.flux > /dev/null 2>&1 && sleep 1
-		sudo mv /home/$USER/.flux/zelcash.conf /home/$USER/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
+		sudo mv /mnt/volume_lon1_09/.zelcash /mnt/volume_lon1_09/.flux > /dev/null 2>&1 && sleep 1
+		sudo mv /mnt/volume_lon1_09/.flux/zelcash.conf /mnt/volume_lon1_09/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
 	fi
 	if [[ -d $CONFIG_DIR ]]; then
 		config_veryfity
@@ -314,7 +314,7 @@ function wipe_clean() {
 			if [[ "$SKIP_OLD_CHAIN" == "0" ]]; then       
 				if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
 					echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-					sudo rm -rf /home/$USERNAME/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate > /dev/null 2>&1
+					sudo rm -rf /mnt/volume_lon1_09NAME/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate > /dev/null 2>&1
 					sudo rm -rf $CONFIG_DIR  > /dev/null 2>&1
 				else
 					BOOTSTRAP_SKIP="1"
@@ -354,9 +354,9 @@ function wipe_clean() {
 			fi
 		fi
 	fi
-	sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
-	sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1
-	sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1
+	sudo rm -rf /mnt/volume_lon1_09/watchdog > /dev/null 2>&1
+	sudo rm -rf /mnt/volume_lon1_09/stop_daemon_service.sh > /dev/null 2>&1
+	sudo rm -rf /mnt/volume_lon1_09/start_daemon_service.sh > /dev/null 2>&1
 	echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
 	if [[ $(sudo ufw status | grep "Status: active") ]]; then
 		sudo ufw disable > /dev/null 2>&1
@@ -426,7 +426,7 @@ function install_daemon() {
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
    echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
    sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
-   sudo chown -R $USER:$USER /home/$USER/.gnupg > /dev/null 2>&1
+   sudo chown -R $USER:$USER /mnt/volume_lon1_09/.gnupg > /dev/null 2>&1
 	if [[ "$(lsb_release -cs)" == "xenial" ]]; then
 		echo 'deb https://apt.fluxos.network/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
 		gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
@@ -643,7 +643,7 @@ function install_flux() {
 	echo -e "${ARROW} ${CYAN}Creating FluxOS configuration file...${NC}"
 	fluxos_conf_create
 	if [ -d ~/$FLUX_DIR ]; then
-		current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+		current_ver=$(jq -r '.version' /mnt/volume_lon1_09/$FLUX_DIR/package.json)
 		string_limit_check_mark "FluxOS v$current_ver installed................................." "FluxOS ${GREEN}v$current_ver${CYAN} installed................................."
 		echo -e ""
 	else
@@ -670,7 +670,7 @@ create_service "install"
 selfhosting "install"
 install_process
 start_daemon
-log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
+log_rotate "Flux benchmark" "bench_debug_log" "/mnt/volume_lon1_09/$BENCH_DIR_LOG/debug.log" "monthly" "2"
 log_rotate "Flux daemon" "daemon_debug_log" "$CONFIG_DIR/debug.log" "daily" "7"
 log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
 log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"

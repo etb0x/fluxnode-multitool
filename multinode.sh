@@ -2,17 +2,17 @@
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/etb0x/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 function upnp_disable() {
- if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
+ if [[ ! -f /mnt/volume_lon1_09/zelflux/config/userconfig.js ]]; then
 		echo -e "${WORNING} ${CYAN}Missing FluxOS configuration file - install/re-install Flux Node...${NC}" 
 		echo -e ""
 		exit
  fi
  
- if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-   if [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
+ if [[ -f /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf ]]; then
+   if [[ $(grep -e "fluxport" /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf) != "" ]]; then
      echo -e ""
      echo -e "${ARROW} ${YELLOW}Removing FluxOS UPnP configuration.....${NC}"
-     sed -i "/$(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
+     sed -i "/$(grep -e "fluxport" /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf)/d" /mnt/volume_lon1_09/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
    else
 	 echo -e "${ARROW} ${CYAN}UPnP Mode is already disabled...${NC}"
 	 echo -e ""
@@ -24,8 +24,8 @@ function upnp_disable() {
    exit
  fi
  
- if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep 'apiport' | wc -l) == "1" ]]; then
-	cat /home/$USER/zelflux/config/userconfig.js | sed '/apiport/d' | sudo tee "/home/$USER/zelflux/config/userconfig.js" > /dev/null
+ if [[ $(cat /mnt/volume_lon1_09/zelflux/config/userconfig.js | grep 'apiport' | wc -l) == "1" ]]; then
+	cat /mnt/volume_lon1_09/zelflux/config/userconfig.js | sed '/apiport/d' | sudo tee "/mnt/volume_lon1_09/zelflux/config/userconfig.js" > /dev/null
  fi
  echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
  echo -e ""

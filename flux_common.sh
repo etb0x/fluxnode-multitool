@@ -122,6 +122,7 @@ function flux_daemon_conf_create() {
 	listen=1
 	externalip=$WANIP
 	bind=0.0.0.0
+	datadir=/mnt/volume_lon1_09/flux_data
 	addnode=80.211.207.17
 	addnode=95.217.12.176
 	addnode=89.58.3.209

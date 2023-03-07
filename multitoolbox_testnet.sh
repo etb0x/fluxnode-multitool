@@ -28,7 +28,7 @@ if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_FILE='zelcash.conf'
     
 else
-    CONFIG_DIR='.flux'
+    CONFIG_DIR='/mnt/volume_lon1_09/flux'
     CONFIG_FILE='flux.conf'
 fi
 

@@ -22,7 +22,7 @@ if [[ -d /home/$USER/.zelcash ]]; then
 	CONFIG_DIR='.zelcash'
 	CONFIG_FILE='zelcash.conf'
 else
-	CONFIG_DIR='.flux'
+	CONFIG_DIR='/mnt/volume_lon1_09/flux'
 	CONFIG_FILE='flux.conf'
 fi
 
@@ -35,9 +35,9 @@ zelflux_setting_import="0"
 OS_FLAGE="$2"
 
 function config_veryfity(){
-	if [[ -f /home/$USER/.flux/flux.conf ]]; then
+	if [[ -f /mnt/volume_lon1_09/flux/flux.conf ]]; then
 		echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
-		insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+		insightexplorer=$(cat /mnt/volume_lon1_09/flux/flux.conf | grep 'insightexplorer=1' | wc -l)
 		if [[ "$insightexplorer" == "1" ]]; then
 			echo -e "${ARROW} ${CYAN}Insightexplorer enabled..............[${CHECK_MARK}${CYAN}]${NC}"
 			echo ""
@@ -765,13 +765,13 @@ function node_reconfiguration() {
 				reset=0
 			fi
 		fi
-		if [[ -d /home/$USER/.flux ]]; then
+		if [[ -d /mnt/volume_lon1_09/flux ]]; then
       if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]]; then
 				zelnodeprivkey="$prvkey"
 				zelnodeoutpoint="$outpoint"
 				zelnodeindex="$index"
 				echo -e "${ARROW} ${CYAN}Creating Daemon config file...${NC}"
-				sudo rm -rf /home/$USER/.flux/flux.conf > /dev/null 2>&1
+				sudo rm -rf /mnt/volume_lon1_09/flux/flux.conf > /dev/null 2>&1
 				flux_daemon_conf_create
 				reset=0
 			fi
@@ -783,7 +783,7 @@ function node_reconfiguration() {
   			watchdog_conf_create
 			reset=0
 		fi
-		if [[ -d /home/$USER/.flux ]]; then
+		if [[ -d /mnt/volume_lon1_09/flux ]]; then
 			if [[ ! -z "$upnp_port" && ! -z "$gateway_ip" ]]; then
 				reset=1
 				upnp_enable

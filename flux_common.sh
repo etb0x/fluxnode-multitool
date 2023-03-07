@@ -43,7 +43,7 @@ network_url_2="explorer.runonflux.io"
 network_url_3="blockbook.zel.network"
 #Wallet variable
 COIN_NAME='flux'
-CONFIG_DIR='.flux'
+CONFIG_DIR='/mnt/volume_lon1_09/flux'
 CONFIG_FILE='flux.conf'
 #FluxOS variable
 FLUX_DIR='zelflux'
